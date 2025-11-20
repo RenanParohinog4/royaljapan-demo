@@ -583,3 +583,30 @@ def random_with_N_digits(n):
     range_start = 10**(n-1)
     range_end = (10**n)-1
     return str(randint(range_start, range_end))
+
+class StakeView(APIView):
+    permission_classes = (AllowAny,)
+    def post(self, request):
+        data = request.data
+        amount = data.get("amount")
+
+        if amount is None:
+            return Response(
+            {"message": f"BAD_REQUEST"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+        try:
+            amount = float(amount)
+            if amount <= 0:
+                raise ValueError
+        except (TypeError, ValueError):
+            return Response(
+                {"message": "Amount must be a number greater than 0"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        return Response(
+            {"message": f"Stake of {int(amount)} accepted!"},
+            status=status.HTTP_200_OK
+        )

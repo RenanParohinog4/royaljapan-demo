@@ -24,6 +24,7 @@ urlpatterns = [
     path('create-payment-intent', CreatePaymentIntentView.as_view()),
     path('sold', CompletePayment.as_view()),
     path('webhook', StripeWebHookView.as_view()),
+    path('stake', StakeView.as_view()),
     
 ]
 
