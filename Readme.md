@@ -15,7 +15,7 @@ OnlineStore is designed to provide a seamless online shopping experience with th
 - **Cryptocurrency Payments:** Integration with popular cryptocurrency payment gateways for secure transactions.
 - **Order Management:** Track and manage user orders and payment status.
 - **Admin Dashboard:** Admin panel for managing products, orders, and users.
-- **Responsive Design:** Optimized for both desktop and mobile devices.
+- **Responsive Design:** Optimized for both desktop and mobile devices..
 
 ## Getting started
 
