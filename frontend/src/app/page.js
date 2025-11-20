@@ -9,34 +9,58 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Sitemap from "@/components/Sitemap";
 import { useParams } from "next/navigation";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import MessageBox from "@/components/MessageBox";
+
 // const baseurl = import.meta.env.REACT_APP_API_BASE_URL;
 const baseurl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 function TopPage() {
+
+  const [spinnerVisibility, setSpinnerVisibility] = useState(false)
+  const [messageBoxText, setMessageBoxText] = useState("")
+  const [messageBoxVisibility, setMessageBoxVisibility] = useState(false);
+
   const { id } = useParams();
 
   useEffect(() => {
     localStorage.setItem("userID", id);
   }, [id]);
-  const [products, setProducts] = useState([]);
+  
   useEffect(() => {
     getUserData(id);
   }, []);
+
+  const [products, setProducts] = useState([]);
 
   const getUserData = (id) => {
     let config = {
       method: "get",
       url: `${baseurl}/api/user-products/${id}`,
     };
+
+    setSpinnerVisibility(true);
+    
     axios(config)
       .then(async (response) => {
         setProducts(response.data.products);
+        setSpinnerVisibility(false);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setSpinnerVisibility(false);
+        setTimeout(() => {
+          setMessageBoxVisibility(true);
+          setMessageBoxText(`${err.message ? err.message : 'Something went wrong!'}`)
+        },1000)
+    });
   };
 
   return (
     <>
+      
+      <MessageBox message={messageBoxText} visible={messageBoxVisibility}></MessageBox>
+      <LoadingSpinner visible={spinnerVisibility}></LoadingSpinner>
+      
       <Header />
       <div className="product">
         <section className="top">
@@ -117,7 +141,7 @@ function TopPage() {
             </a>
           </div>
         </section>
-        <section className="list">
+        {/* <section className="list">
           <div className="list-title">全ての商品</div>
           <div className="contain">
             {products.map((item, index) => (
@@ -143,7 +167,39 @@ function TopPage() {
               </div>
             ))}
           </div>
+        </section> */}
+        
+        <section className="list">
+          <div className="list-title">全ての商品</div>
+
+          {products.length === 0 ? (
+            <div className="no-products">No products found</div>
+          ) : (
+            <div className="contain">
+              {products.map((item, index) => (
+                <div className="list-item" key={index}>
+                  <div className="list-item-thumb">
+                    <Image width={300} height={300} src={item.image} alt="" />
+                  </div>
+                  <h3 className="list-item-title">{item.title}</h3>
+                  <div className="list-item-package">{item.package}</div>
+                  <p className="list-item-content">{item.description}</p>
+                  <div className="list-item-price">
+                    <div className="wrap">
+                      <div className="list-item-price-title">特別限定価格</div>
+                      <p>
+                        {parseInt(item.price_sell).toLocaleString("en-US")}{" "}
+                        <span>(税込)</span>
+                      </p>
+                    </div>
+                    <a href={`/products/${id}/${item.id}`}>今すぐ購入する</a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
+
         <section className="social">
           <div className="contain">
             <div className="social-part">

@@ -33,6 +33,9 @@ html a {
   text-decoration: none;
 }
 
+body{
+  font-family: Arial, Helvetica, sans-serif;
+}
 
 .red{
   color: red;
@@ -2958,5 +2961,63 @@ footer .footer-sns-item img {
   position: absolute;
 }
 
+/* CSS FOR SPINNER */
 
+.loader-content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(15px);
+  z-index: 9999;
+}
 
+.spinner {
+  animation: rotator 1.8s linear infinite;
+  width: 100%;
+  height: 15%;
+  position: absolute;
+}
+
+.spinner-path {
+  stroke: #ffffff;
+  stroke-dasharray: 187;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  stroke-width: 2;
+  animation: dash 1.8s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+}
+
+@keyframes rotator {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 187;
+  }
+
+  50% {
+    stroke-dashoffset: 46.75;
+    transform: rotate(135deg);
+  }
+
+  100% {
+    stroke-dashoffset: 187;
+    transform: rotate(450deg);
+  }
+}
+
+.no-products{
+  text-align: center;
+}
